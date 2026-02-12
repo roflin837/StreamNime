@@ -111,18 +111,17 @@ function showHome() {
 }
 
 async function playEpisode(id, ep) {
-  const video = document.getElementById("video-player"); // Ganti tag <iframe> jadi <video> di HTML!
+  const video = document.getElementById("video-player");
   const title = document.getElementById("playing-episode");
   
-  title.innerText = "Sabar, lagi nembus server...";
+  // Ambil judul buat dijadiin ID (slug) Gogoanime
+  const slug = document.getElementById("detail-title").innerText.toLowerCase().replace(/ /g, "-");
   
-  try {
-    // Kita panggil backend api kita buat dapetin link video mentah
-    // Kita pake slug judul buat Gogoanime (contoh: "one-piece")
-    const animeSlug = document.getElementById("detail-title").innerText.toLowerCase().replace(/ /g, "-");
-    const response = await fetch(`/api?animeId=${animeSlug}&episode=${ep}`);
-    const data = await response.json();
+  title.innerText = "Mencari jalur video...";
 
+  try {
+    const res = await fetch(`/api?animeId=${slug}&episode=${ep}`);
+    const data = await res.json();
     const streamUrl = data.sources.find(s => s.quality === 'default' || s.quality === '720p').url;
 
     if (Hls.isSupported()) {
@@ -130,14 +129,10 @@ async function playEpisode(id, ep) {
       hls.loadSource(streamUrl);
       hls.attachMedia(video);
       hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-    } else {
-      video.src = streamUrl;
     }
-    
     title.innerText = `Nonton Episode ${ep}`;
-    document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });
   } catch (err) {
-    title.innerText = "Aduhh, server videonya lagi buntu. Coba episode lain.";
+    title.innerText = "Video gagal ditarik, coba episode lain.";
   }
 }
 

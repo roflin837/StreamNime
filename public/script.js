@@ -113,7 +113,7 @@ function showHome() {
 function playEpisode(id, ep) {
   const iframe = document.getElementById("video-iframe");
   
-  // Pake Animesrc, ini jalur alternatif paling bandel buat anime
+  // Pake vidsrc.to, ini yang paling sakti buat anime biar gak 404
   iframe.src = `https://vidsrc.to/embed/anime/${id}/${ep}`;
   
   document.getElementById("playing-episode").innerText = `Nonton Episode ${ep}`;

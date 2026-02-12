@@ -113,8 +113,8 @@ function showHome() {
 function playEpisode(id, ep) {
   const iframe = document.getElementById("video-iframe");
   
-  // Pake provider vidsrc.pro, biasanya paling lengkap buat anime baru
-  iframe.src = `https://vidsrc.pro/embed/anime/${id}/${ep}`;
+  // Kita coba pake provider .xyz, biasanya lebih stabil buat anime baru
+  iframe.src = `https://vidsrc.xyz/embed/anime/${id}/${ep}`;
   
   document.getElementById("playing-episode").innerText = `Nonton Episode ${ep}`;
   document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });

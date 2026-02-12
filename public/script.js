@@ -111,16 +111,24 @@ function showHome() {
 }
 
 function playEpisode(id, ep) {
-  const url = `https://myanimelist.net/anime/${id}`;
-  
-  document.getElementById("playing-episode").innerHTML = `
-    player tidak tersedia.<br>
-    <a href="${url}" target="_blank">
-      <button>Lihat di MAL</button>
-    </a>
-  `;
-}
+  const iframe = document.getElementById("video-iframe");
+  const title = document.getElementById("playing-episode");
 
+  // Server 1: Vidsrc.to (Default lo)
+  const url1 = `https://vidsrc.to/embed/anime/${id}/${ep}`;
+  // Server 2: Animesrc (Database beda, biasanya lebih lengkap)
+  const url2 = `https://vidsrc.xyz/embed/anime/${id}/${ep}`;
+
+  iframe.src = url1;
+  title.innerHTML = `
+    Nonton Episode ${ep} <br>
+    <small>Kalau 404, coba: 
+      <a href="javascript:void(0)" onclick="document.getElementById('video-iframe').src='${url2}'" style="color: #4444ff;">Klik Server 2</a>
+    </small>
+  `;
+  
+  document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });
+}
 // 5. JALANKAN ANTREAN LOAD DATA
 window.onload = async () => {
   await loadCategory("trending-grid", "/top/anime?limit=12&filter=airing");

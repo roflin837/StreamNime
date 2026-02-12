@@ -111,26 +111,38 @@ function showHome() {
 async function playEpisode(id, ep) {
   const video = document.getElementById("video-player");
   const title = document.getElementById("playing-episode");
+  const status = document.getElementById("player-status-text");
   
-  // Ambil judul buat dijadiin ID (slug) Gogoanime
-  const slug = document.getElementById("detail-title").innerText.toLowerCase().replace(/ /g, "-");
+  // 1. Bersihin judul biar lebih ramah buat server video
+  const rawTitle = document.getElementById("detail-title").innerText;
+  const slug = rawTitle.toLowerCase()
+    .replace(/[^\w\s-]/g, '') // Hapus simbol aneh (titik dua, koma, dll)
+    .replace(/\s+/g, '-');     // Spasi jadi strip
   
-  title.innerText = "Mencari jalur video...";
+  title.innerText = `Mencari Episode ${ep}...`;
 
   try {
     const res = await fetch(`/api?animeId=${slug}&episode=${ep}`);
     const data = await res.json();
-    const streamUrl = data.sources.find(s => s.quality === 'default' || s.quality === '720p').url;
+    
+    // Kalau link ketemu
+    if (data.sources && data.sources.length > 0) {
+      const streamUrl = data.sources.find(s => s.quality === 'default' || s.quality === '720p').url;
 
-    if (Hls.isSupported()) {
-      const hls = new Hls();
-      hls.loadSource(streamUrl);
-      hls.attachMedia(video);
-      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+      if (Hls.isSupported()) {
+        const hls = new Hls();
+        hls.loadSource(streamUrl);
+        hls.attachMedia(video);
+        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+      }
+      title.innerText = `Nonton Episode ${ep}`;
+      status.innerText = "Selamat Menonton!";
+    } else {
+      throw new Error("Link zonk");
     }
-    title.innerText = `Nonton Episode ${ep}`;
   } catch (err) {
-    title.innerText = "Video gagal ditarik, coba episode lain.";
+    title.innerText = "Video gagal ditarik.";
+    status.innerHTML = `Judul "${slug}" gak ketemu di server video. <br> Coba anime populer lain buat ngetes!`;
   }
 }
 

@@ -112,12 +112,34 @@ function showHome() {
 
 function playEpisode(id, ep) {
   const iframe = document.getElementById("video-iframe");
-  
-  // Pake vidsrc.to, ini yang paling sakti buat anime biar gak 404
-  iframe.src = `https://vidsrc.to/embed/anime/${id}/${ep}`;
-  
-  document.getElementById("playing-episode").innerText = `Nonton Episode ${ep}`;
-  document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });
+  const title = document.getElementById("playing-episode");
+  const container = document.querySelector(".player-container");
+
+  const url = `https://vidsrc.to/embed/anime/${id}/${ep}`;
+
+  iframe.style.display = "block";
+  iframe.src = url;
+
+  title.innerText = `Nonton Episode ${ep}`;
+  container.scrollIntoView({ behavior: "smooth" });
+
+  let loaded = false;
+
+  iframe.onload = () => {
+    loaded = true;
+  };
+
+  setTimeout(() => {
+    if (!loaded) {
+      iframe.style.display = "none";
+      title.innerHTML = `
+        Player gagal dimuat.<br>
+        <a href="${url}" target="_blank">
+          <button>Buka di Tab Baru</button>
+        </a>
+      `;
+    }
+  }, 5000);
 }
 
 // 5. JALANKAN ANTREAN LOAD DATA

@@ -114,9 +114,9 @@ function playEpisode(id, ep) {
   
   // Daftar server biar gak zonk
   const servers = {
-    VIP: `https://vidsrc.xyz/embed/anime/${id}/${ep}`,
-    Alternative: `https://vidsrc.to/embed/anime/${id}/${ep}`,
-    Pro: `https://vidsrc.me/embed/anime?mal_id=${id}&episode=${ep}`
+      VIP: `https://vidsrc.cc/v2/embed/anime/${id}/${ep}`,
+      Alternative: `https://vidlink.pro/anime/${id}/${ep}`,
+      Pro: `https://vidsrc.xyz/embed/anime/${id}/${ep}`
   };
 
   title.innerText = `Nonton Episode ${ep}`;

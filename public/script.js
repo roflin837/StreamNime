@@ -111,35 +111,14 @@ function showHome() {
 }
 
 function playEpisode(id, ep) {
-  const iframe = document.getElementById("video-iframe");
-  const title = document.getElementById("playing-episode");
-  const container = document.querySelector(".player-container");
-
-  const url = `https://vidsrc.to/embed/anime/${id}/${ep}`;
-
-  iframe.style.display = "block";
-  iframe.src = url;
-
-  title.innerText = `Nonton Episode ${ep}`;
-  container.scrollIntoView({ behavior: "smooth" });
-
-  let loaded = false;
-
-  iframe.onload = () => {
-    loaded = true;
-  };
-
-  setTimeout(() => {
-    if (!loaded) {
-      iframe.style.display = "none";
-      title.innerHTML = `
-        Player gagal dimuat.<br>
-        <a href="${url}" target="_blank">
-          <button>Buka di Tab Baru</button>
-        </a>
-      `;
-    }
-  }, 5000);
+  const url = `https://myanimelist.net/anime/${id}`;
+  
+  document.getElementById("playing-episode").innerHTML = `
+    player tidak tersedia.<br>
+    <a href="${url}" target="_blank">
+      <button>Lihat di MAL</button>
+    </a>
+  `;
 }
 
 // 5. JALANKAN ANTREAN LOAD DATA

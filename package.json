@@ -1,9 +1,5 @@
 {
   "name": "stream-nime",
   "version": "1.0.0",
-  "description": "Anime Streaming Platform",
-  "main": "api/index.js",
-  "scripts": {
-    "start": "node api/index.js"
-  }
+  "type": "module"
 }

@@ -1,4 +1,4 @@
-const BASE_API = "https://api.consumet.org/anime/gogoanime";
+const BASE_API = "/api?endpoint=";
 
 // 1. FUNGSI UTAMA LOAD DATA
 async function loadCategory(gridId, endpoint) {

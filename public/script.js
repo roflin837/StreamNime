@@ -9,7 +9,7 @@ async function loadCategory(gridId, endpoint) {
     
     try {
         const response = await fetch(`${BASE_API}/${endpoint}`);
-        const data = await response.json();
+        const data = await eresponse.json();
         
         if (data.results && data.results.length > 0) {
             renderCards(data.results, grid);
@@ -101,6 +101,7 @@ function playEpisode(episodeId) {
 }
 
 // 5. FITUR SEARCH
+// Cari bagian ini di script.js lo dan ganti:
 async function searchAnime() {
     const query = document.getElementById("searchInput").value;
     if (!query) return;
@@ -109,7 +110,8 @@ async function searchAnime() {
     const grid = document.getElementById("trending-grid");
     document.querySelector(".section-title").innerText = `Hasil Pencarian: ${query}`;
     
-    await loadCategory("trending-grid", query);
+    // Gogoanime di Consumet biasanya pake format ini untuk search:
+    await loadCategory("trending-grid", encodeURIComponent(query)); 
 }
 
 // 6. BACK TO HOME

@@ -56,16 +56,10 @@ async function searchAnime() {
 
   const grid = document.getElementById("trending-grid");
   grid.innerHTML = "<p>Mencari anime...</p>";
-  showHome(); // Balik ke home biar hasil pencarian keliatan
+  showHome();
 
-  // Gunakan logika isLocal juga di search
-  const isLocal =
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "localhost";
-  const searchPath = `/anime?q=${encodeURIComponent(query)}&limit=20`;
-  const finalUrl = isLocal
-    ? `https://api.jikan.moe/v4${searchPath}`
-    : `${API_BASE}?path=${encodeURIComponent(searchPath)}`;
+  // JANGAN pake API_BASE, langsung tembak Jikan aja biar aman
+  const finalUrl = `https://api.jikan.moe/v4/anime?q=${encodeURIComponent(query)}&limit=20`;
 
   try {
     const res = await fetch(finalUrl);

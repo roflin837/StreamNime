@@ -110,32 +110,37 @@ function showHome() {
 
 function playEpisode(id, ep) {
   const container = document.querySelector(".player-container");
-  const title = document.getElementById("playing-episode");
   
-  // Daftar server biar gak zonk
+  // 1. Daftar server (Pake nama yang konsisten)
   const servers = {
-    Jalur1: `https://vidsrc.su/embed/anime/${id}/${ep}`,
-    Jalur2: `https://vidsrc.me/embed/anime?mal_id=${id}&episode=${ep}`,
-    Jalur3: `https://2embed.org/library/anime/${id}/${ep}`
+    VIP: `https://vidsrc.cc/v2/embed/anime/${id}/${ep}`,
+    Alternative: `https://vidlink.pro/anime/${id}/${ep}`,
+    Backup: `https://vidsrc.su/embed/anime/${id}/${ep}`
   };
 
-  title.innerText = `Nonton Episode ${ep}`;
-  
-  // Set default ke Server VIP
+  // 2. Langsung isi container (Hapus typo VIP vs Jalur1)
   container.innerHTML = `
     <h2 id="playing-episode">Nonton Episode ${ep}</h2>
-    <iframe id="main-player" src="${servers.VIP}" style="width: 100%; aspect-ratio: 16/9; border: none; border-radius: 12px;" allowfullscreen></iframe>
-    <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
-      <button onclick="changeServer('${servers.VIP}')" style="padding: 10px; background: #444; color: #fff; border-radius: 5px;">Server VIP</button>
-      <button onclick="changeServer('${servers.Alternative}')" style="padding: 10px; background: #444; color: #fff; border-radius: 5px;">Server 2</button>
-      <button onclick="changeServer('${servers.Pro}')" style="padding: 10px; background: #444; color: #fff; border-radius: 5px;">Server 3</button>
+    <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; background:#000; border-radius:12px;">
+      <iframe id="main-player" src="${servers.VIP}" 
+        style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" 
+        allowfullscreen></iframe>
+    </div>
+    
+    <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="changeServer('${servers.VIP}')" style="padding: 10px 15px; background: #6c5ce7; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Server VIP</button>
+      <button onclick="changeServer('${servers.Alternative}')" style="padding: 10px 15px; background: #444; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server 2</button>
+      <button onclick="changeServer('${servers.Backup}')" style="padding: 10px 15px; background: #444; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server 3</button>
     </div>
   `;
 }
 
-// Fungsi buat ganti source iframe pas diklik
+// Fungsi ganti server (Pastikan ini ada di script.js)
 function changeServer(url) {
-  document.getElementById("main-player").src = url;
+  const player = document.getElementById("main-player");
+  if(player) {
+    player.src = url;
+  }
 }
 
 // 5. JALANKAN ANTREAN LOAD DATA

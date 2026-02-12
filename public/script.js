@@ -1,5 +1,4 @@
 const API_BASE = "/api";
-const JIKAN_URL = "https://api.jikan.moe/v4";
 
 // 1. FUNGSI LOAD DATA (DENGAN LOGIKA LOCALHOST/VERCEL)
 async function loadCategory(id, jikanPath) {
@@ -113,8 +112,9 @@ function showHome() {
 
 function playEpisode(id, ep) {
   const iframe = document.getElementById("video-iframe");
-  // Ganti linknya ke vidsrc.to biar lebih gacor
-  iframe.src = `https://vidsrc.to/embed/anime/${id}/${ep}`;
+  
+  // Pake provider vidsrc.pro, biasanya paling lengkap buat anime baru
+  iframe.src = `https://vidsrc.pro/embed/anime/${id}/${ep}`;
   
   document.getElementById("playing-episode").innerText = `Nonton Episode ${ep}`;
   document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });

@@ -110,7 +110,10 @@ function showHome() {
 
 // 6. INIT
 window.onload = () => {
-    loadCategory("trending-grid", "top-airing");
-    setTimeout(() => loadCategory("isekai-grid", "summer"), 1000);
-    setTimeout(() => loadCategory("action-grid", "action"), 2000);
+    // Top Airing itu pasti ada datanya
+    loadCategory("trending-grid", "top-airing"); 
+    // Ganti 'summer' jadi 'recent-release' (Anime terbaru)
+    setTimeout(() => loadCategory("isekai-grid", "recent-release"), 1000); 
+    // Untuk action, kita panggil page 1 nya
+    setTimeout(() => loadCategory("action-grid", "top-airing?page=2"), 2000);
 };

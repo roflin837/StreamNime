@@ -107,7 +107,14 @@ function showDetail(anime) {
 function showHome() {
   document.getElementById("home-page").classList.remove("hidden");
   document.getElementById("detail-page").classList.add("hidden");
-  document.getElementById("video-iframe").src = "";
+  
+  // Berhentiin video pas balik ke home
+  const video = document.getElementById("video-player");
+  if (video) {
+    video.pause();
+    video.src = "";
+    video.load();
+  }
 }
 
 async function playEpisode(id, ep) {

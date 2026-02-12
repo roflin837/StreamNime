@@ -9,7 +9,7 @@ async function loadCategory(gridId, endpoint) {
     
     try {
         const response = await fetch(`${BASE_API}/${endpoint}`);
-        const data = await eresponse.json();
+        const data = await response.json(); // UDAH DIBERESIN DARI TYPO 'eresponse'
         
         if (data.results && data.results.length > 0) {
             renderCards(data.results, grid);
@@ -28,8 +28,6 @@ function renderCards(list, container) {
     list.forEach((anime) => {
         const card = document.createElement("div");
         card.className = "anime-card";
-        
-        // Simpan data ID Gogoanime buat dipake pas klik
         card.onclick = () => showDetail(anime.id);
 
         card.innerHTML = `
@@ -45,25 +43,23 @@ function renderCards(list, container) {
 
 // 3. HALAMAN DETAIL & AMBIL EPISODE
 async function showDetail(animeId) {
-    const homePage = document.getElementById("home-page");
-    const detailPage = document.getElementById("detail-page");
-    
-    homePage.classList.add("hidden");
-    detailPage.classList.remove("hidden");
+    document.getElementById("home-page").classList.add("hidden");
+    document.getElementById("detail-page").classList.remove("hidden");
     window.scrollTo(0, 0);
 
+    const epList = document.getElementById("episode-list");
+    epList.innerHTML = "Memuat episode...";
+
     try {
-        const res = await fetch(`${BASE_API}/info/${animeId}`);
+        // Panggil lewat API proxy kita
+        const res = await fetch(`${BASE_API}info/${animeId}`);
         const data = await res.json();
 
         document.getElementById("detail-title").innerText = data.title;
         document.getElementById("detail-img").src = data.image;
         document.getElementById("detail-desc").innerText = data.description || "No description.";
         
-        // Render Daftar Episode
-        const epList = document.getElementById("episode-list");
         epList.innerHTML = "";
-        
         data.episodes.forEach((ep) => {
             const btn = document.createElement("button");
             btn.className = "ep-btn";
@@ -73,19 +69,17 @@ async function showDetail(animeId) {
         });
 
     } catch (err) {
-        alert("Gagal memuat detail anime.");
+        console.error("Detail error:", err);
+        epList.innerHTML = "Gagal memuat episode.";
     }
 }
 
-// 4. PLAYER MULTI-SERVER (GOGOANIME)
+// 4. PLAYER
 function playEpisode(episodeId) {
     const container = document.querySelector(".player-container");
     const statusText = document.getElementById("playing-episode");
     
     statusText.innerText = `Memutar: ${episodeId.replace(/-/g, ' ')}`;
-
-    // Pake Proxy Player biar gak kena block 404 LiteSpeed
-    const streamUrl = `https://api.consumet.org/anime/gogoanime/watch/${episodeId}`;
 
     container.innerHTML = `
         <h2 id="playing-episode">Nonton ${episodeId}</h2>
@@ -94,38 +88,29 @@ function playEpisode(episodeId) {
                 style="position:absolute; top:0; left:0; width:100%; height:100%; border:none;" 
                 allowfullscreen></iframe>
         </div>
-        <div class="server-info" style="margin-top:10px; color:#aaa; font-size:12px;">
-            <p>Tips: Gunakan tombol 'Server' di dalam player jika video tidak muncul.</p>
-        </div>
     `;
 }
 
-// 5. FITUR SEARCH
-// Cari bagian ini di script.js lo dan ganti:
+// 5. SEARCH & NAVIGATION
 async function searchAnime() {
     const query = document.getElementById("searchInput").value;
     if (!query) return;
     
     showHome();
-    const grid = document.getElementById("trending-grid");
     document.querySelector(".section-title").innerText = `Hasil Pencarian: ${query}`;
-    
-    // Gogoanime di Consumet biasanya pake format ini untuk search:
     await loadCategory("trending-grid", encodeURIComponent(query)); 
 }
 
-// 6. BACK TO HOME
 function showHome() {
     document.getElementById("home-page").classList.remove("hidden");
     document.getElementById("detail-page").classList.add("hidden");
-    // Bersihin player biar gak berat
     const container = document.querySelector(".player-container");
     container.innerHTML = '<h2 id="playing-episode">Pilih Episode</h2>';
 }
 
-// 7. INISIALISASI
+// 6. INIT
 window.onload = () => {
     loadCategory("trending-grid", "top-airing");
-    setTimeout(() => loadCategory("isekai-grid", "summer"), 1000); // Kategori musiman
+    setTimeout(() => loadCategory("isekai-grid", "summer"), 1000);
     setTimeout(() => loadCategory("action-grid", "action"), 2000);
 };

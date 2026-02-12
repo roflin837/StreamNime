@@ -1,14 +1,26 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="id">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>NimeStream - The Universe of Anime</title>
+    
     <link rel="stylesheet" href="style.css" />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet" />
+    
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+    
+    <style>
+      /* Tambahan dikit biar player lo gak gepeng */
+      #video-player {
+        width: 100%;
+        aspect-ratio: 16 / 9;
+        border-radius: 12px;
+        background: #000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+      }
+      .hidden { display: none; }
+    </style>
   </head>
   <body>
     <nav>
@@ -25,34 +37,27 @@
           <div class="banner-content">
             <span class="trending-tag">#1 Terpopuler</span>
             <h1>Solo Leveling Season 2</h1>
-            <p>
-              Ikuti petualangan Sung Jin-Woo dalam dunia Hunter yang semakin
-              berbahaya.
-            </p>
+            <p>Ikuti petualangan Sung Jin-Woo dalam dunia Hunter yang semakin berbahaya.</p>
             <button class="play-now">Tonton Sekarang</button>
           </div>
         </div>
 
-      <div class="genre-nav">
-        <button onclick="filterGenre(1, 'Action')">Action</button>
-        <button onclick="filterGenre(2, 'Adventure')">Adventure</button>
-        <button onclick="filterGenre(4, 'Comedy')">Comedy</button>
-        <button onclick="filterGenre(10, 'Fantasy')">Fantasy</button>
-        <button onclick="filterGenre(22, 'Romance')">Romance</button>
-        <button onclick="filterGenre(37, 'Supernatural')">Supernatural</button>
-      </div>
+        <div class="genre-nav">
+          <button onclick="filterGenre(1, 'Action')">Action</button>
+          <button onclick="filterGenre(2, 'Adventure')">Adventure</button>
+          <button onclick="filterGenre(4, 'Comedy')">Comedy</button>
+          <button onclick="filterGenre(10, 'Fantasy')">Fantasy</button>
+          <button onclick="filterGenre(22, 'Romance')">Romance</button>
+          <button onclick="filterGenre(37, 'Supernatural')">Supernatural</button>
+        </div>
 
         <section>
-          <h2 class="section-title">
-            Sedang Hangat 🔥 <span>Lihat Semua</span>
-          </h2>
+          <h2 class="section-title">Sedang Hangat 🔥 <span>Lihat Semua</span></h2>
           <div class="anime-grid" id="trending-grid"></div>
         </section>
 
         <section>
-          <h2 class="section-title">
-            Isekai & Fantasy 🌀 <span>Lihat Semua</span>
-          </h2>
+          <h2 class="section-title">Isekai & Fantasy 🌀 <span>Lihat Semua</span></h2>
           <div class="anime-grid" id="isekai-grid"></div>
         </section>
 
@@ -62,17 +67,13 @@
         </section>
 
         <section>
-          <h2 class="section-title">
-            Paling Romantis ❤️ <span>Lihat Semua</span>
-          </h2>
+          <h2 class="section-title">Paling Romantis ❤️ <span>Lihat Semua</span></h2>
           <div class="anime-grid" id="romance-grid"></div>
         </section>
       </div>
 
       <div id="detail-page" class="hidden">
-        <button class="back-btn" onclick="showHome()">
-          ← Kembali ke Beranda
-        </button>
+        <button class="back-btn" onclick="showHome()">← Kembali ke Beranda</button>
 
         <div class="anime-header">
           <img id="detail-img" src="" alt="Poster" />
@@ -88,11 +89,13 @@
 
         <div class="player-container">
           <h2 id="playing-episode">Pilih Episode</h2>
-          <video id="video-player" controls style="width: 100%; border-radius: 12px; background: #000;"></video>
-        </div>
-          <div class="player-info">
-            <h3 id="playing-episode">Pilih episode di bawah</h3>
-            <p>Gunakan Jalur VIP jika video tidak muncul.</p>
+          <video id="video-player" controls preload="auto"></video>
+          
+          <div class="player-info" style="margin-top: 15px;">
+            <h3 id="player-status-text">Selamat Menonton!</h3>
+            <p style="color: #888; font-size: 0.9rem;">
+              Tips: Jika video macet, coba refresh halaman atau gunakan koneksi yang lebih stabil.
+            </p>
           </div>
         </div>
 

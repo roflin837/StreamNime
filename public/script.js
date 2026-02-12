@@ -135,3 +135,25 @@ window.onload = async () => {
     3000,
   );
 };
+
+async function filterGenre(genreId, genreName) {
+  const grid = document.getElementById("trending-grid");
+  if (!grid) return;
+
+  // Sembunyiin section lain biar fokus ke hasil genre
+  document.getElementById("isekai-grid").parentElement.style.display = "none";
+  document.getElementById("action-grid").parentElement.style.display = "none";
+  document.getElementById("romance-grid").parentElement.style.display = "none";
+
+  grid.innerHTML = `<p>Memuat genre ${genreName}...</p>`;
+  showHome(); // Pastiin balik ke home kalau lagi di halaman detail
+
+  // Panggil data genre lewat API
+  await loadCategory("trending-grid", `/anime?genres=${genreId}&limit=24&order_by=score&sort=desc`);
+  
+  // Ganti judul biar user tau lagi liat genre apa
+  document.querySelector(".section-title").innerText = `Genre: ${genreName}`;
+  
+  // Scroll halus ke atas biar kelihatan hasilnya
+  window.scrollTo({ top: 400, behavior: 'smooth' });
+}

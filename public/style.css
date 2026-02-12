@@ -310,27 +310,81 @@ main {
 }
 
 /* RESPONSIVE HP */
+/* RESPONSIVE HP (FINAL FIX) */
 @media (max-width: 768px) {
+  /* 1. Navbar: Logo di atas, Search di bawah biar lega */
+  nav {
+    flex-direction: column;
+    gap: 15px;
+    padding: 15px 15px;
+  }
+
+  .search-box {
+    width: 100%; /* Search bar jadi selebar layar */
+    justify-content: space-between;
+  }
+
+  .search-box input {
+    width: 100%; /* Input ngikutin box */
+  }
+
+  /* 2. Banner: Perkecil teks & tinggi biar gak nutupin layar */
+  .main-banner {
+    height: 220px;
+    padding: 0 20px;
+    background-position: top center; /* Biar muka karakter keliatan */
+  }
+
+  .banner-content h1 {
+    font-size: 20px;
+    max-width: 250px;
+  }
+
+  .banner-content p {
+    display: none; /* Sembunyiin deskripsi di HP biar ringkas */
+  }
+
+  .play-now {
+    padding: 8px 20px;
+    font-size: 13px;
+  }
+
+  /* 3. Grid: 2 Kolom aja biar poster gak kekecilan */
+  .anime-grid {
+    grid-template-columns: repeat(2, 1fr); /* 3 itu kependekan, 2 pas buat jempol */
+    gap: 12px;
+  }
+
+  /* 4. Detail Page: Gambar di atas teks */
   .anime-header {
     flex-direction: column;
     align-items: center;
     text-align: center;
   }
+
   .anime-header img {
-    width: 180px;
+    width: 160px;
+    box-shadow: 0 10px 20px rgba(0,0,0,0.5);
   }
-  .main-banner {
-    height: 250px;
-    padding: 0 20px;
-  }
-  .banner-content h1 {
+
+  .info h1 {
     font-size: 24px;
+    margin-top: 15px;
   }
-  .banner-content p {
-    font-size: 12px;
+
+  /* 5. Episode: Biar kotak-kotaknya gak berantakan */
+  .ep-grid {
+    grid-template-columns: repeat(5, 1fr);
+    gap: 8px;
   }
+}
+
+/* KHUSUS LAYAR SANGAT KECIL (HP Jadul) */
+@media (max-width: 480px) {
   .anime-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 10px;
+    grid-template-columns: repeat(2, 1fr);
+  }
+  .logo {
+    font-size: 20px;
   }
 }

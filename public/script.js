@@ -111,14 +111,14 @@ function showHome() {
 function playEpisode(id, ep) {
   const container = document.querySelector(".player-container");
   
-  // 1. Daftar server (Pake nama yang konsisten)
+  // Pastiin nama di sini (VIP, Alternative, Backup)
   const servers = {
     VIP: `https://vidsrc.cc/v2/embed/anime/${id}/${ep}`,
     Alternative: `https://vidlink.pro/anime/${id}/${ep}`,
-    Backup: `https://vidsrc.su/embed/anime/${id}/${ep}`
+    Backup: `https://vidsrc.xyz/embed/anime/${id}/${ep}`
   };
 
-  // 2. Langsung isi container (Hapus typo VIP vs Jalur1)
+  // Sama dengan nama yang dipanggil di sini
   container.innerHTML = `
     <h2 id="playing-episode">Nonton Episode ${ep}</h2>
     <div style="position:relative; padding-bottom:56.25%; height:0; overflow:hidden; background:#000; border-radius:12px;">
@@ -128,9 +128,9 @@ function playEpisode(id, ep) {
     </div>
     
     <div style="margin-top: 15px; display: flex; gap: 10px; flex-wrap: wrap;">
-      <button onclick="changeServer('${servers.VIP}')" style="padding: 10px 15px; background: #6c5ce7; color: #fff; border: none; border-radius: 5px; cursor: pointer; font-weight: bold;">Server VIP</button>
-      <button onclick="changeServer('${servers.Alternative}')" style="padding: 10px 15px; background: #444; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server 2</button>
-      <button onclick="changeServer('${servers.Backup}')" style="padding: 10px 15px; background: #444; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server 3</button>
+      <button onclick="changeServer('${servers.VIP}')" style="padding: 10px; background: #6c5ce7; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server VIP</button>
+      <button onclick="changeServer('${servers.Alternative}')" style="padding: 10px; background: #444; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server 2</button>
+      <button onclick="changeServer('${servers.Backup}')" style="padding: 10px; background: #444; color: #fff; border: none; border-radius: 5px; cursor: pointer;">Server 3</button>
     </div>
   `;
 }

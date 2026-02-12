@@ -1,4 +1,5 @@
 const API_BASE = "/api";
+const JIKAN_URL = "https://api.jikan.moe/v4";
 
 // 1. FUNGSI LOAD DATA (DENGAN LOGIKA LOCALHOST/VERCEL)
 async function loadCategory(id, jikanPath) {

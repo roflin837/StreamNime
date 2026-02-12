@@ -112,11 +112,11 @@ function showHome() {
 
 function playEpisode(id, ep) {
   const iframe = document.getElementById("video-iframe");
-  iframe.src = `https://vidsrc.cc/v2/embed/anime/${id}/${ep}`;
+  // Ganti ke vidsrc.to biar lebih stabil dan gak 404
+  iframe.src = `https://vidsrc.to/embed/anime/${id}/${ep}`;
+  
   document.getElementById("playing-episode").innerText = `Nonton Episode ${ep}`;
-  document
-    .querySelector(".player-container")
-    .scrollIntoView({ behavior: "smooth" });
+  document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });
 }
 
 // 5. JALANKAN ANTREAN LOAD DATA

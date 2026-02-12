@@ -113,36 +113,25 @@ async function playEpisode(id, ep) {
   const title = document.getElementById("playing-episode");
   const status = document.getElementById("player-status-text");
   
-  // 1. Bersihin judul biar lebih ramah buat server video
-  const rawTitle = document.getElementById("detail-title").innerText;
-  const slug = rawTitle.toLowerCase()
-    .replace(/[^\w\s-]/g, '') // Hapus simbol aneh (titik dua, koma, dll)
-    .replace(/\s+/g, '-');     // Spasi jadi strip
-  
   title.innerText = `Mencari Episode ${ep}...`;
 
-  try {
-    const res = await fetch(`/api?animeId=${slug}&episode=${ep}`);
-    const data = await res.json();
-    
-    // Kalau link ketemu
-    if (data.sources && data.sources.length > 0) {
-      const streamUrl = data.sources.find(s => s.quality === 'default' || s.quality === '720p').url;
+  // Jalur VIP: Kita pake ID MAL (id) biar PASTI KETEMU
+  // Gak perlu pusing sama spasi atau strip lagi
+  const vipUrl = `https://vidsrc.xyz/embed/anime/${id}/${ep}`;
 
-      if (Hls.isSupported()) {
-        const hls = new Hls();
-        hls.loadSource(streamUrl);
-        hls.attachMedia(video);
-        hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
-      }
-      title.innerText = `Nonton Episode ${ep}`;
-      status.innerText = "Selamat Menonton!";
-    } else {
-      throw new Error("Link zonk");
-    }
+  try {
+    // Kita hapus logika HLS bentar, kita balik pake iframe buat jalur VIP ini
+    // Karena vidsrc.xyz nyediain player yang udah mateng
+    const container = document.querySelector(".player-container");
+    container.innerHTML = `
+      <h2 id="playing-episode">Nonton Episode ${ep}</h2>
+      <iframe src="${vipUrl}" style="width: 100%; aspect-ratio: 16/9; border: none; border-radius: 12px;" allowfullscreen></iframe>
+    `;
+    
+    status.innerText = "Selamat Menonton di Jalur VIP!";
   } catch (err) {
     title.innerText = "Video gagal ditarik.";
-    status.innerHTML = `Judul "${slug}" gak ketemu di server video. <br> Coba anime populer lain buat ngetes!`;
+    status.innerText = "Coba lagi atau cek koneksi lo.";
   }
 }
 

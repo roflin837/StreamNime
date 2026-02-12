@@ -110,25 +110,37 @@ function showHome() {
   document.getElementById("video-iframe").src = "";
 }
 
-function playEpisode(id, ep) {
-  const iframe = document.getElementById("video-iframe");
+async function playEpisode(id, ep) {
+  const video = document.getElementById("video-player"); // Ganti tag <iframe> jadi <video> di HTML!
   const title = document.getElementById("playing-episode");
-
-  // Server 1: Vidsrc.to (Default lo)
-  const url1 = `https://vidsrc.to/embed/anime/${id}/${ep}`;
-  // Server 2: Animesrc (Database beda, biasanya lebih lengkap)
-  const url2 = `https://vidsrc.xyz/embed/anime/${id}/${ep}`;
-
-  iframe.src = url1;
-  title.innerHTML = `
-    Nonton Episode ${ep} <br>
-    <small>Kalau 404, coba: 
-      <a href="javascript:void(0)" onclick="document.getElementById('video-iframe').src='${url2}'" style="color: #4444ff;">Klik Server 2</a>
-    </small>
-  `;
   
-  document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });
+  title.innerText = "Sabar, lagi nembus server...";
+  
+  try {
+    // Kita panggil backend api kita buat dapetin link video mentah
+    // Kita pake slug judul buat Gogoanime (contoh: "one-piece")
+    const animeSlug = document.getElementById("detail-title").innerText.toLowerCase().replace(/ /g, "-");
+    const response = await fetch(`/api?animeId=${animeSlug}&episode=${ep}`);
+    const data = await response.json();
+
+    const streamUrl = data.sources.find(s => s.quality === 'default' || s.quality === '720p').url;
+
+    if (Hls.isSupported()) {
+      const hls = new Hls();
+      hls.loadSource(streamUrl);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play());
+    } else {
+      video.src = streamUrl;
+    }
+    
+    title.innerText = `Nonton Episode ${ep}`;
+    document.querySelector(".player-container").scrollIntoView({ behavior: "smooth" });
+  } catch (err) {
+    title.innerText = "Aduhh, server videonya lagi buntu. Coba episode lain.";
+  }
 }
+
 // 5. JALANKAN ANTREAN LOAD DATA
 window.onload = async () => {
   await loadCategory("trending-grid", "/top/anime?limit=12&filter=airing");

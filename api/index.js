@@ -1,23 +1,21 @@
-import axios from 'axios';
+const axios = require('axios');
 
 export default async function handler(req, res) {
-  const { path, animeId, episode } = req.query;
-  res.setHeader('Access-Control-Allow-Origin', '*');
+  // Ambil endpoint dari query string (misal: /api?endpoint=top-airing)
+  const { endpoint } = req.query;
+  
+  // Base URL Consumet (Gue kasih cadangan yang lebih stabil)
+  const CONSUMET_URL = "https://api.consumet.org/anime/gogoanime";
 
   try {
-    // Jalur data poster (Jikan)
-    if (path) {
-      const response = await axios.get(`https://api.jikan.moe/v4${path}`);
-      return res.status(200).json(response.data);
-    }
-
-    // Jalur nembak VIDEO (Scraping via Consumet)
-    if (animeId && episode) {
-      // Kita pake provider Gogoanime karena paling stabil gratisannya
-      const streamRes = await axios.get(`https://consumet-api-production-e816.up.railway.app/anime/gogoanime/watch/${animeId}-episode-${episode}`);
-      return res.status(200).json(streamRes.data);
-    }
+    const response = await axios.get(`${CONSUMET_URL}/${endpoint}`);
+    
+    // Kasih header biar gak diblokir browser
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'GET');
+    
+    return res.status(200).json(response.data);
   } catch (error) {
-    res.status(500).json({ error: "Gagal narik data" });
+    return res.status(500).json({ error: "Server Consumet lagi tepar, Flinn!" });
   }
 }

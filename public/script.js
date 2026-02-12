@@ -108,31 +108,34 @@ function showHome() {
   }
 }
 
-async function playEpisode(id, ep) {
-  const video = document.getElementById("video-player");
+function playEpisode(id, ep) {
+  const container = document.querySelector(".player-container");
   const title = document.getElementById("playing-episode");
-  const status = document.getElementById("player-status-text");
   
-  title.innerText = `Mencari Episode ${ep}...`;
+  // Daftar server biar gak zonk
+  const servers = {
+    VIP: `https://vidsrc.xyz/embed/anime/${id}/${ep}`,
+    Alternative: `https://vidsrc.to/embed/anime/${id}/${ep}`,
+    Pro: `https://vidsrc.me/embed/anime?mal_id=${id}&episode=${ep}`
+  };
 
-  // Jalur VIP: Kita pake ID MAL (id) biar PASTI KETEMU
-  // Gak perlu pusing sama spasi atau strip lagi
-  const vipUrl = `https://vidsrc.xyz/embed/anime/${id}/${ep}`;
+  title.innerText = `Nonton Episode ${ep}`;
+  
+  // Set default ke Server VIP
+  container.innerHTML = `
+    <h2 id="playing-episode">Nonton Episode ${ep}</h2>
+    <iframe id="main-player" src="${servers.VIP}" style="width: 100%; aspect-ratio: 16/9; border: none; border-radius: 12px;" allowfullscreen></iframe>
+    <div style="margin-top: 10px; display: flex; gap: 10px; flex-wrap: wrap;">
+      <button onclick="changeServer('${servers.VIP}')" style="padding: 10px; background: #444; color: #fff; border-radius: 5px;">Server VIP</button>
+      <button onclick="changeServer('${servers.Alternative}')" style="padding: 10px; background: #444; color: #fff; border-radius: 5px;">Server 2</button>
+      <button onclick="changeServer('${servers.Pro}')" style="padding: 10px; background: #444; color: #fff; border-radius: 5px;">Server 3</button>
+    </div>
+  `;
+}
 
-  try {
-    // Kita hapus logika HLS bentar, kita balik pake iframe buat jalur VIP ini
-    // Karena vidsrc.xyz nyediain player yang udah mateng
-    const container = document.querySelector(".player-container");
-    container.innerHTML = `
-      <h2 id="playing-episode">Nonton Episode ${ep}</h2>
-      <iframe src="${vipUrl}" style="width: 100%; aspect-ratio: 16/9; border: none; border-radius: 12px;" allowfullscreen></iframe>
-    `;
-    
-    status.innerText = "Selamat Menonton di Jalur VIP!";
-  } catch (err) {
-    title.innerText = "Video gagal ditarik.";
-    status.innerText = "Coba lagi atau cek koneksi lo.";
-  }
+// Fungsi buat ganti source iframe pas diklik
+function changeServer(url) {
+  document.getElementById("main-player").src = url;
 }
 
 // 5. JALANKAN ANTREAN LOAD DATA

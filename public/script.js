@@ -5,12 +5,9 @@ async function loadCategory(id, jikanPath) {
   const grid = document.getElementById(id);
   if (!grid) return;
 
-  const isLocal =
-    window.location.hostname === "127.0.0.1" ||
-    window.location.hostname === "localhost";
-  const finalUrl = isLocal
-    ? `https://api.jikan.moe/v4${jikanPath}`
-    : `${API_BASE}?path=${encodeURIComponent(jikanPath)}`;
+  // Langsung tembak ke Jikan API, nggak usah lewat /api buatan kita
+  // Biar Vercel gak bingung dan poster lo langsung muncul
+  const finalUrl = `https://api.jikan.moe/v4${jikanPath}`;
 
   try {
     const response = await fetch(finalUrl);
